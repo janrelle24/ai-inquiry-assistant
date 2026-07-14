@@ -1,31 +1,26 @@
-import { useState } from "react";
+//import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import ChatWindow from "../components/ChatWindow";
 import ChatInput from "../components/ChatInput";
 
-function Home() {
-    const [messages, setMessages] = useState([]);
+import useChat from "../hooks/useChat";
 
-    const handleSendMessage = (text) => {
-        const newMessage = {
-            id: Date.now(),
-            role: "user",
-            content: text,
-        };
-        setMessages((prev) => [...prev, newMessage]);
-    }
+function Home() {
+    const {messages, sendMessage} = useChat();
+
+    
     return (
         <div className="flex h-screen bg-slate-100">
-        <Sidebar />
+            <Sidebar />
 
-        <div className="flex flex-1 flex-col">
-            <Navbar />
+            <div className="flex flex-1 flex-col">
+                <Navbar />
 
-            <ChatWindow messages={messages} />
+                <ChatWindow messages={messages} />
 
-            <ChatInput onSend={handleSendMessage} />
-        </div>
+                <ChatInput onSend={sendMessage} />
+            </div>
         </div>
     );
 }
