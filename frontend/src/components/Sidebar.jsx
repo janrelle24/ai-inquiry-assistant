@@ -17,7 +17,7 @@ function Sidebar() {
                 <HeartPulse size={20} />
                 </div>
                 <div>
-                <h1 className="text-base font-bold leading-tight text-ink dark:text-white">MediGuide AI</h1>
+                <h1 className="text-base font-bold leading-tight text-ink dark:text-white">MedCare AI</h1>
                 <p className="text-xs text-muted">Medical Requirements Assistant</p>
                 </div>
             </div>
