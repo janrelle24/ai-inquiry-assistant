@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 
+import chatRoutes from "./routes/chatRoutes.js";
+
 const app = express();
 
 app.use(cors());
@@ -12,5 +14,5 @@ app.get("/", (req, res) => {
         message: "Welcome to MedCare AI Backend 🚀",
     });
 });
-
+app.use("/api/chat", chatRoutes);
 export default app;
