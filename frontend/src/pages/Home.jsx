@@ -7,7 +7,7 @@ import ChatInput from "../components/ChatInput";
 import useChat from "../hooks/useChat";
 
 function Home() {
-    const {messages, sendMessage} = useChat();
+    const {messages, sendMessage, isTyping} = useChat();
 
     
     return (
@@ -17,7 +17,10 @@ function Home() {
             <div className="flex flex-1 flex-col">
                 <Navbar />
 
-                <ChatWindow messages={messages} />
+                <ChatWindow 
+                    messages={messages}
+                    isTyping={isTyping}
+                />
 
                 <ChatInput onSend={sendMessage} />
             </div>

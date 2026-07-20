@@ -2,6 +2,7 @@ import { useState } from "react";
 
 export default function useChat() {
     const [messages, setMessages] = useState([]);
+    const [isTyping, setIsTyping] = useState(false);
 
     const sendMessage = (text) => {
         const userMessage = {
@@ -11,6 +12,7 @@ export default function useChat() {
         };
 
         setMessages((prev) => [...prev, userMessage]);
+        setIsTyping(true);
 
         // Fake AI response
         setTimeout(() => {
@@ -22,11 +24,13 @@ export default function useChat() {
         };
 
         setMessages((prev) => [...prev, aiMessage]);
+            setIsTyping(false);
         }, 1000);
     };
 
     return {
         messages,
         sendMessage,
+        isTyping,
     };
 }
