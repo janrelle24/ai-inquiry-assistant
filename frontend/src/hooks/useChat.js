@@ -30,9 +30,15 @@ export default function useChat() {
         }, 1000);
     };
 
+    const clearChat = () => {
+        setMessages([]);
+        setIsTyping(false);
+    }
+
     return {
         messages,
         sendMessage,
         isTyping,
+        clearChat,
     };
 }

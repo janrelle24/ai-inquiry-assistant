@@ -1,5 +1,6 @@
 import { FaRobot, FaUser } from "react-icons/fa";
 import CopyButton from "./CopyButton";
+import { motion } from "framer-motion";
 function ChatMessage({ message }) {
     const isUser = message.role === "user";
 
@@ -9,7 +10,18 @@ function ChatMessage({ message }) {
     });
     
     return (
-        <div
+        <motion.div
+            initial={{
+                opacity: 0,
+                y: 20,
+            }}
+            animate={{
+                opacity: 1,
+                y: 0,
+            }}
+            transition={{
+                duration: 0.3,
+            }}
             className={`mb-6 flex ${
                 isUser ? "justify-end" : "justify-start"
             }`}
@@ -58,7 +70,7 @@ function ChatMessage({ message }) {
                 )}
 
             </div>
-        </div>
+        </motion.div>
     );
 }
 

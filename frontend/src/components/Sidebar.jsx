@@ -1,5 +1,5 @@
 import { Plus, HeartPulse, Clock, ClipboardList, Landmark, FileText, MapPin, Wallet, Info } from "lucide-react";
-function Sidebar() {
+function Sidebar({ onNewChat }) {
 
     const suggestedQuestions = [
         { icon: Clock, tint: "text-blue-600 bg-blue-50", text: "What are the steps for a PhilHealth claim?" },
@@ -25,8 +25,8 @@ function Sidebar() {
             {/* New Chat Button */}
             <div className="px-4">
                 <button
-                //onClick={onNewChat} later
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-dark cursor-pointer"
+                    onClick={onNewChat}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-dark cursor-pointer"
                 >
                 <Plus size={16} /> New Chat
                 </button>
