@@ -29,7 +29,7 @@ function Home() {
 
     
     return (
-        <div className="flex h-screen bg-slate-100">
+        <div className="flex h-screen bg-slate-100 transition-colors duration-300 dark:bg-slate-950">
             <Sidebar
                 onNewChat={handleNewChat}
             />

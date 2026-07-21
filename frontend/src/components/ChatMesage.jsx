@@ -47,7 +47,7 @@ function ChatMessage({ message }) {
                         className={`rounded-2xl px-5 py-3 ${
                             isUser
                                 ? "bg-blue-600 text-white"
-                                : "bg-white shadow"
+                                : "bg-white text-slate-900 shadow dark:bg-slate-800 dark:text-white"
                         }`}
                     >
                         {message.content}

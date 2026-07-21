@@ -11,7 +11,7 @@ function ChatWindow({ messages, isTyping }) {
         });
     }, [messages]);
     return (
-        <main className="flex-1 overflow-y-auto bg-slate-100 p-8">
+        <main className="flex-1 overflow-y-auto bg-slate-100 p-8 transition-colors duration-300 dark:bg-slate-950">
             {messages.length === 0 ? (
                 <WelcomeCard />
             ) : (
