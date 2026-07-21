@@ -6,9 +6,10 @@ export default function useChat() {
 
     const sendMessage = (text) => {
         const userMessage = {
-        id: Date.now(),
-        role: "user",
-        content: text,
+            id: Date.now(),
+            role: "user",
+            content: text,
+            timestamp: new Date(),
         };
 
         setMessages((prev) => [...prev, userMessage]);
@@ -21,6 +22,7 @@ export default function useChat() {
             role: "assistant",
             content:
             "This is a sample AI response. Later, this will come from our Node.js backend.",
+            timestamp: new Date(),
         };
 
         setMessages((prev) => [...prev, aiMessage]);

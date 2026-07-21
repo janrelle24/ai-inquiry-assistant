@@ -1,20 +1,62 @@
+import { FaRobot, FaUser } from "react-icons/fa";
+import CopyButton from "./CopyButton";
 function ChatMessage({ message }) {
     const isUser = message.role === "user";
 
+    const time = new Date(message.timestamp).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+    
     return (
         <div
-            className={`mb-4 flex ${
-            isUser ? "justify-end" : "justify-start"
+            className={`mb-6 flex ${
+                isUser ? "justify-end" : "justify-start"
             }`}
         >
-            <div
-            className={`max-w-md rounded-2xl px-5 py-3 ${
-                isUser
-                ? "bg-blue-600 text-white"
-                : "bg-white shadow"
-            }`}
-            >
-            {message.content}
+            <div className="flex max-w-2xl gap-3">
+
+                {/* AI Avatar */}
+                {!isUser && (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white">
+                        <FaRobot />
+                    </div>
+                )}
+
+                <div className="group">
+
+                    {/* Sender */}
+                    <p className="mb-1 text-sm font-semibold text-gray-600">
+                        {isUser ? "You" : "MedCare AI"}
+                    </p>
+
+                    {/* Bubble */}
+                    <div
+                        className={`rounded-2xl px-5 py-3 ${
+                            isUser
+                                ? "bg-blue-600 text-white"
+                                : "bg-white shadow"
+                        }`}
+                    >
+                        {message.content}
+                    </div>
+
+                    {/* Timestamp */}
+                    <p className="mt-1 text-xs text-gray-400">
+                        {time}
+                    </p>
+                    {!isUser && (
+                        <CopyButton text={message.content} />
+                    )}
+                </div>
+
+                {/* User Avatar */}
+                {isUser && (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-700 text-white">
+                        <FaUser />
+                    </div>
+                )}
+
             </div>
         </div>
     );
