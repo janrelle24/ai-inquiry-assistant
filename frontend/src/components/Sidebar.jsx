@@ -1,5 +1,5 @@
 import { Plus, HeartPulse, Clock, ClipboardList, Landmark, FileText, MapPin, Wallet, Info } from "lucide-react";
-function Sidebar({ onNewChat }) {
+function Sidebar({ isOpen, onClose, onNewChat }) {
 
     const suggestedQuestions = [
         { icon: Clock, tint: "text-blue-600 bg-blue-50", text: "What are the steps for a PhilHealth claim?" },
@@ -10,7 +10,23 @@ function Sidebar({ onNewChat }) {
         { icon: MapPin, tint: "text-red-600 bg-red-50", text: "Where do I submit my requirements?" },
     ];
     return (
-        <aside className="flex w-80 flex-col border-r border-slate-200 bg-white transition-colors duration-300 dark:border-slate-700 dark:bg-slate-900hidden w-80 shrink-0 flex-col border-r border-line bg-panel dark:border-slate-800 dark:bg-slate-900 md:flex">
+        <aside className=
+            {`
+                fixed left-0 top-0 z-40
+                flex h-full w-72 flex-col
+                border-r border-slate-200
+                bg-white
+                transition-transform duration-300
+                dark:border-slate-700
+                dark:bg-slate-900
+
+                ${isOpen ? "translate-x-0" : "-translate-x-full"}
+
+                lg:relative
+                lg:w-80
+                lg:translate-x-0`}
+            
+        >
             
             <div className="flex items-center gap-3 px-6 py-6">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-emerald-400 text-white">
@@ -25,7 +41,10 @@ function Sidebar({ onNewChat }) {
             {/* New Chat Button */}
             <div className="px-4">
                 <button
-                    onClick={onNewChat}
+                    onClick={() => {
+                        onNewChat();
+                        onClose();
+                    }}
                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-sm font-medium text-white transition hover:bg-brand-dark cursor-pointer"
                 >
                 <Plus size={16} /> New Chat
@@ -42,16 +61,18 @@ function Sidebar({ onNewChat }) {
                     {suggestedQuestions.map((item, index) => (
                         <button
                             key={index}
-                            //onClick={() => onSuggestion(s.text)} later
+                            onClick={() => onClose()}
                             className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition hover:border-blue-500 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 cursor-pointer"
-                            >
-                            <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${item.tint} dark:bg-slate-800`}>
-                                <item.icon size={14} />
-                            </span>
+                        >
+                            <div className="flex items-start gap-3">
+                                <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${item.tint} dark:bg-slate-800`}>
+                                    <item.icon size={14} />
+                                </span>
 
-                            <span className="text-sm cursor-pointer">
-                                {item.text}
-                            </span>
+                                <span className="text-sm cursor-pointer">
+                                    {item.text}
+                                </span>
+                            </div>
                         </button>
                     ))}
                 </div>

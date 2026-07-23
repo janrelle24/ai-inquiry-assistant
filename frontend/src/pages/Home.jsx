@@ -10,6 +10,7 @@ import useChat from "../hooks/useChat";
 
 function Home() {
     const [showConfirm, setShowConfirm] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const {messages, sendMessage, isTyping, clearChat,} = useChat();
     
     const handleNewChat = () => {
@@ -29,14 +30,17 @@ function Home() {
 
     
     return (
-        <div className="flex h-screen bg-slate-100 transition-colors duration-300 dark:bg-slate-950">
+        <div className="flex h-screen overflow-hidden bg-slate-100 transition-colors duration-300 dark:bg-slate-950">
             <Sidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
                 onNewChat={handleNewChat}
             />
             
             <div className="flex flex-1 flex-col">
                 <Navbar
                     onNewChat={handleNewChat}
+                    onToggleSidebar={() => setSidebarOpen(true)}
                 />
 
                 <ChatWindow 
@@ -46,6 +50,12 @@ function Home() {
 
                 <ChatInput onSend={sendMessage} />
             </div>
+            {sidebarOpen && (
+                <div
+                    onClick={() => setSidebarOpen(false)}
+                    className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+                />
+            )}
             <ConfirmModal
                 isOpen={showConfirm}
                 title="🩺 New Chat"
