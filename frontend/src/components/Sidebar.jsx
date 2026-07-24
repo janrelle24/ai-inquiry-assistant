@@ -1,13 +1,44 @@
-import { Plus, HeartPulse, Clock, ClipboardList, Landmark, FileText, MapPin, Wallet, Info } from "lucide-react";
+import { Plus, ClipboardList, Landmark, FileText, MapPin, Info, CheckCircle2,
+    ShieldCheck, MessageCircleQuestion, } from "lucide-react";
+import logo from "../assets/E-Tanong.png";
 function Sidebar({ isOpen, onClose, onNewChat }) {
 
     const suggestedQuestions = [
-        { icon: Clock, tint: "text-blue-600 bg-blue-50", text: "What are the steps for a PhilHealth claim?" },
-        { icon: ClipboardList, tint: "text-emerald-600 bg-emerald-50", text: "What documents do I need for hospital admission?" },
-        { icon: Landmark, tint: "text-purple-600 bg-purple-50", text: "How do I avail of a government health program?" },
-        { icon: Wallet, tint: "text-amber-600 bg-amber-50", text: "How do I file an insurance reimbursement?" },
-        { icon: FileText, tint: "text-blue-600 bg-blue-50", text: "How do I request a medical certificate?" },
-        { icon: MapPin, tint: "text-red-600 bg-red-50", text: "Where do I submit my requirements?" },
+        {
+            icon: MessageCircleQuestion,
+            tint: "text-indigo-600 bg-indigo-50",
+            text: "What is E-Tanong AI?",
+        },
+        {
+            icon: MapPin,
+            tint: "text-blue-600 bg-blue-50",
+            text: "Where can I apply for medical assistance?",
+        },
+        {
+            icon: Landmark,
+            tint: "text-emerald-600 bg-emerald-50",
+            text: "What medical assistance programs are offered by DSWD, DOH, LGU, and PSWDO?",
+        },
+        {
+            icon: ClipboardList,
+            tint: "text-purple-600 bg-purple-50",
+            text: "What are the requirements for Medicine Assistance?",
+        },
+        {
+            icon: FileText,
+            tint: "text-amber-600 bg-amber-50",
+            text: "What are the requirements for Hospital Bill Assistance?",
+        },
+        {
+            icon: CheckCircle2,
+            tint: "text-blue-600 bg-blue-50",
+            text: "What documents are required to apply for medical assistance?",
+        },
+        {
+            icon: ShieldCheck,
+            tint: "text-red-600 bg-red-50",
+            text: "Who is eligible for government medical assistance?",
+        },
     ];
     return (
         <aside className=
@@ -29,12 +60,14 @@ function Sidebar({ isOpen, onClose, onNewChat }) {
         >
             
             <div className="flex items-center gap-3 px-6 py-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-emerald-400 text-white">
-                    <HeartPulse size={20} />
-                </div>
+                <img
+                    src={logo}
+                    alt="E-Tanong AI Logo"
+                    className="h-20 w-20 object-contain"
+                />
                 <div>
-                <h1 className="text-base font-bold leading-tight text-ink dark:text-white">MedCare AI</h1>
-                <p className="text-sm text-gray-500 dark:text-slate-400">Medical Requirements Assistant</p>
+                    <h1 className="text-base font-bold leading-tight text-ink dark:text-white">E-Tanong AI</h1>
+                    <p className="text-sm text-gray-500 dark:text-slate-400">Medical Requirements Assistant</p>
                 </div>
             </div>
 
@@ -86,10 +119,8 @@ function Sidebar({ isOpen, onClose, onNewChat }) {
                 </div>
 
                 <p className="text-sm leading-6 text-gray-600 dark:text-slate-300">
-                    I provide general health information only and
-                    cannot diagnose illnesses or prescribe
-                    medication. Always consult a licensed
-                    healthcare professional.
+                    I provide process and requirements guidance only, and cannot diagnose conditions
+                    or prescribe treatment.
                 </p>
             </div>
         </aside>
