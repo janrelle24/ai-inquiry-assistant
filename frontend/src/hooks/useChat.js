@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { sendChatMessage } from "../api/chatApi";
 
 export default function useChat() {
     const [messages, setMessages] = useState([]);
     const [isTyping, setIsTyping] = useState(false);
 
-    const sendMessage = (text) => {
+    const sendMessage = async (text) => {
+        if (!text.trim()) return;
+
         const userMessage = {
             id: Date.now(),
             role: "user",
@@ -15,19 +18,29 @@ export default function useChat() {
         setMessages((prev) => [...prev, userMessage]);
         setIsTyping(true);
 
-        // Fake AI response
-        setTimeout(() => {
-        const aiMessage = {
-            id: Date.now() + 1,
-            role: "assistant",
-            content:
-            "This is a sample AI response. Later, this will come from our Node.js backend.",
-            timestamp: new Date(),
-        };
+        try {
+            const data = await sendChatMessage(text);
 
-        setMessages((prev) => [...prev, aiMessage]);
+            const aiMessage = {
+                id: Date.now() + 1,
+                role: "assistant",
+                content: data.reply,
+                timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, aiMessage]);
+        } catch (error) {
+            console.error(error);
+
+            const aiMessage = {
+                id: Date.now() + 1,
+                role: "assistant",
+                content: "Sorry, I couldn't reach the AI server.",
+                timestamp: new Date(),
+            };
+            setMessages((prev) => [...prev, aiMessage]);
+        } finally{
             setIsTyping(false);
-        }, 1000);
+        }
     };
 
     const clearChat = () => {

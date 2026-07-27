@@ -51,12 +51,9 @@ function ChatInput({ onSend }) {
 
     function sendMessage() {
         if (!input.trim() && !attachment) return;
-        /*
-        onSend({
-        message: input,
-        attachment,
-        });*/
-        onSend(input, attachment);
+        
+        /*onSend(input, attachment);*/
+        onSend(input);
 
         setInput("");
         setAttachment(null);
