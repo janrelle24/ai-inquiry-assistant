@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import chatRoutes from "./routes/chat.routes.js";
+import { buildKnowledgeIndex } from "./services/indexKnowledge.js";
+import { setKnowledgeIndex } from "./data/knowledgeIndex.js";
 
 dotenv.config();
 
@@ -34,3 +36,9 @@ process.on("unhandledRejection", (err) => {
     console.error("UNHANDLED REJECTION");
     console.error(err);
 });
+
+const index = buildKnowledgeIndex();
+
+setKnowledgeIndex(index);
+
+console.log(`Loaded ${index.length} knowledge files`);
