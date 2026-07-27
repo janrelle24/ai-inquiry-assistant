@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import pdf from "pdf-parse";
+import { PDFParse } from "pdf-parse";
 
 const documentsFolder = path.join(process.cwd(), "documents");
 
@@ -18,10 +18,16 @@ export async function loadPDFKnowledge() {
             path.join(documentsFolder, file)
         );
 
-        const data = await pdf(buffer);
+        const parser = new PDFParse({
+            data: buffer
+        });
+
+        const result = await parser.getText();
 
         knowledge += "\n";
         knowledge += data.text;
+
+        await parser.destroy();
     }
 
     return knowledge;
