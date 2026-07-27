@@ -24,3 +24,13 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+
+process.on("uncaughtException", (err) => {
+    console.error("UNCAUGHT EXCEPTION");
+    console.error(err);
+});
+
+process.on("unhandledRejection", (err) => {
+    console.error("UNHANDLED REJECTION");
+    console.error(err);
+});
