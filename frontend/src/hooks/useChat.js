@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { sendChatMessage } from "../api/chatApi";
 
 export default function useChat() {
     const [messages, setMessages] = useState([]);
     const [isTyping, setIsTyping] = useState(false);
+    const sessionId = useRef(crypto.randomUUID());
 
     const sendMessage = async (text) => {
         if (!text.trim()) return;
@@ -19,7 +20,7 @@ export default function useChat() {
         setIsTyping(true);
 
         try {
-            const data = await sendChatMessage(text);
+            const data = await sendChatMessage(text, sessionId.current);
 
             const aiMessage = {
                 id: Date.now() + 1,

@@ -3,13 +3,13 @@ import axios from "axios";
 const API = axios.create({
     baseURL: "http://localhost:5000/api",
     /*baseURL: "http://127.0.0.1:5000/api",*/
-    timeout: 10000,
+    timeout: 30000,
 });
 
-export const sendChatMessage = async (message) => {
+export const sendChatMessage = async (message, sessionId) => {
     try {
         const response = await API.post("/chat", {
-            message,
+            message, sessionId
         });
 
         return response.data;

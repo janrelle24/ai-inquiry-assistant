@@ -1,0 +1,31 @@
+{
+  "name": "ai-inquiry-assistant",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000a\u0000i\u0000-\u0000i\u0000n\u0000q\u0000u\u0000i\u0000r\u0000y\u0000-\u0000a\u0000s\u0000s\u0000i\u0000s\u0000t\u0000a\u0000n\u0000t\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/janrelle24/ai-inquiry-assistant.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/janrelle24/ai-inquiry-assistant/issues"
+  },
+  "homepage": "https://github.com/janrelle24/ai-inquiry-assistant#readme",
+  "dependencies": {
+    "@google/genai": "^2.13.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

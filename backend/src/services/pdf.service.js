@@ -3,8 +3,14 @@ import path from "path";
 import { PDFParse } from "pdf-parse";
 
 const documentsFolder = path.join(process.cwd(), "documents");
+let cachedKnowledge = null;
 
 export async function loadPDFKnowledge() {
+
+    // Return the cached text if it's already loaded
+    if (cachedKnowledge) {
+        return cachedKnowledge;
+    }
 
     const files = fs.readdirSync(documentsFolder);
 
@@ -25,10 +31,16 @@ export async function loadPDFKnowledge() {
         const result = await parser.getText();
 
         knowledge += "\n";
-        knowledge += data.text;
+        knowledge += result.text;
 
         await parser.destroy();
     }
 
-    return knowledge;
+    // Save the extracted text in memory
+    cachedKnowledge = knowledge;
+
+    console.log("✅ PDF knowledge loaded into memory.");
+
+    //return knowledge;
+    return cachedKnowledge;
 }
