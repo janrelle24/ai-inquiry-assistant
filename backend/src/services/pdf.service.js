@@ -7,40 +7,45 @@ let cachedKnowledge = null;
 
 export async function loadPDFKnowledge() {
 
-    // Return the cached text if it's already loaded
     if (cachedKnowledge) {
+        console.log("⚡ Using cached PDF knowledge.");
         return cachedKnowledge;
     }
 
-    const files = fs.readdirSync(documentsFolder);
+    const files = fs.
+        readdirSync(documentsFolder)
+        .filter(file => file.endsWith(".pdf"));
+
+    if (files.length === 0) {
+        throw new Error("No PDF documents found.");
+    }
 
     let knowledge = "";
 
     for (const file of files) {
 
-        if (!file.endsWith(".pdf")) continue;
-
-        const buffer = fs.readFileSync(
-            path.join(documentsFolder, file)
-        );
-
-        const parser = new PDFParse({
-            data: buffer
-        });
-
-        const result = await parser.getText();
-
-        knowledge += "\n";
-        knowledge += result.text;
-
-        await parser.destroy();
+        try {
+            const buffer = fs.readFileSync(
+                path.join(documentsFolder, file)
+            );
+    
+            const parser = new PDFParse({
+                data: buffer
+            });
+    
+            const result = await parser.getText();
+            console.log(`📄 Loaded ${file}`);
+            knowledge += "\n";
+            knowledge += result.text;
+    
+            await parser.destroy();
+        }catch(error){
+            console.error(`Failed to read ${file}`, error);
+        }
+        
     }
-
-    // Save the extracted text in memory
     cachedKnowledge = knowledge;
-
     console.log("✅ PDF knowledge loaded into memory.");
 
-    //return knowledge;
     return cachedKnowledge;
 }
