@@ -2,6 +2,7 @@ import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
 import { loadPDFKnowledge } from "./pdf.service.js";
 import { buildPrompt } from "./prompt.service.js";
+import { retrieveRelevantChunks } from "./retrieval.service.js";
 import {
     getConversation,
     addMessage,
@@ -11,48 +12,62 @@ const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
 });
 
-export async function generateResponse(question, sessionId) {
-    try {
-        const pdfKnowledge = await loadPDFKnowledge();
+export async function generateResponse(question, sessionId, retries = 3) {
+    for (let i = 0; i < retries; i++){
 
-        //
-        const history = getConversation(sessionId);
-        const conversation = history
-            .map(
-                (m) =>
-                    `${m.role.toUpperCase()}:
-        ${m.content}`
-            )
-            .join("\n\n");
+        try {
+            const pdfText = await loadPDFKnowledge();
+            const pdfKnowledge = retrieveRelevantChunks(
+                pdfText,
+                question
+            );
 
-        const fullPrompt = buildPrompt(
-            pdfKnowledge,
-            conversation,
-            question
-        );
-        
-        const response = await ai.models.generateContent({
-            model: "gemini-flash-latest",
-            contents: fullPrompt,
-        });
+            const history = getConversation(sessionId);
+            const conversation = history
+                .map(
+                    (m) =>
+                        `${m.role.toUpperCase()}:
+            ${m.content}`
+                )
+                .join("\n\n");
 
-        const reply = response.text;
+            const fullPrompt = buildPrompt(
+                pdfKnowledge,
+                conversation,
+                question
+            );
+            
+            const response = await ai.models.generateContent({
+                model: "gemini-flash-latest",
+                contents: fullPrompt,
+            });
 
-        addMessage(
-            sessionId,
-            "user",
-            question
-        );
-        
-        addMessage(
-            sessionId,
-            "assistant",
-            response.text
-        );
+            const reply = response.text;
 
-        return reply;
-    } catch (error) {
-        console.error("Gemini Error:", error);
-        throw error;
+            addMessage(
+                sessionId,
+                "user",
+                question
+            );
+            
+            addMessage(
+                sessionId,
+                "assistant",
+                response.text
+            );
+
+            return reply;
+        } catch (error) {
+            //console.error("Gemini Error:", error);
+
+            if (error.status !== 503 || i == retries -1) {
+                throw error;
+                //return "The AI service is currently busy. Please try again in a few moments.";
+            }
+            console.log(`Retry ${i + 1}/${retries}...`);
+
+            await new Promise(resolve => setTimeout(resolve, 2000));
+             //throw error;
+        }
     }
 }
