@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import chatRoutes from "./routes/chat.routes.js";
 import { createEmbedding } from "./services/embedding.service.js";
+import { buildKnowledgeIndex } from "./services/index.service.js";
 
 dotenv.config();
 
@@ -28,6 +29,8 @@ const embedding = await createEmbedding(
 
 console.log(embedding.length);
 console.log(embedding.slice(0, 10));
+
+await buildKnowledgeIndex();
 
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
