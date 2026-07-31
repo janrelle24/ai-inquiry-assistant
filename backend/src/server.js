@@ -27,8 +27,8 @@ const embedding = await createEmbedding(
     "Healthcare assistance requirements"
 );
 
-console.log(embedding.length);
-console.log(embedding.slice(0, 10));
+//console.log(embedding.length);
+//console.log(embedding.slice(0, 10));
 
 await buildKnowledgeIndex();
 

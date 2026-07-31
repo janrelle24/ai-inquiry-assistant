@@ -13,7 +13,7 @@ export async function createEmbedding(text) {
             contents: text,
         });
 
-        console.dir(response, { depth: null });
+        //console.dir(response, { depth: null });
 
         return response.embeddings[0].values;
 

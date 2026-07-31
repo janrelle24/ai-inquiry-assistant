@@ -1,12 +1,14 @@
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
-import { loadPDFKnowledge } from "./pdf.service.js";
+//import { loadPDFKnowledge } from "./pdf.service.js";
 import { buildPrompt } from "./prompt.service.js";
-import { retrieveRelevantChunks } from "./retrieval.service.js";
+//import { retrieveRelevantChunks } from "./retrieval.service.js";
 import {
     getConversation,
     addMessage,
 } from "./conversation.service.js";
+import { createEmbedding } from "./embedding.service.js";
+import { searchVectors } from "./vector.service.js";
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -16,11 +18,20 @@ export async function generateResponse(question, sessionId, retries = 3) {
     for (let i = 0; i < retries; i++){
 
         try {
-            const pdfText = await loadPDFKnowledge();
-            const pdfKnowledge = retrieveRelevantChunks(
+            //const pdfText = await loadPDFKnowledge();
+            /*const pdfKnowledge = retrieveRelevantChunks(
                 pdfText,
                 question
-            );
+            );*/
+            const questionEmbedding =
+                await createEmbedding(question);
+
+            const relevantChunks =
+                searchVectors(questionEmbedding);
+
+            const pdfKnowledge =
+                relevantChunks.join("\n\n");
+            /** */
 
             const history = getConversation(sessionId);
             const conversation = history
@@ -58,16 +69,13 @@ export async function generateResponse(question, sessionId, retries = 3) {
 
             return reply;
         } catch (error) {
-            //console.error("Gemini Error:", error);
 
             if (error.status !== 503 || i == retries -1) {
                 throw error;
-                //return "The AI service is currently busy. Please try again in a few moments.";
             }
             console.log(`Retry ${i + 1}/${retries}...`);
 
             await new Promise(resolve => setTimeout(resolve, 2000));
-             //throw error;
         }
     }
 }
