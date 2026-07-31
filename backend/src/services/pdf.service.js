@@ -1,15 +1,15 @@
 import fs from "fs";
 import path from "path";
 import { PDFParse } from "pdf-parse";
+import { knowledgeCache } from "./cache.service.js";
 
 const documentsFolder = path.join(process.cwd(), "documents");
-let cachedKnowledge = null;
 
 export async function loadPDFKnowledge() {
 
-    if (cachedKnowledge) {
+    if (knowledgeCache.loaded) {
         console.log("⚡ Using cached PDF knowledge.");
-        return cachedKnowledge;
+        return knowledgeCache.text;
     }
 
     const files = fs.
@@ -44,8 +44,9 @@ export async function loadPDFKnowledge() {
         }
         
     }
-    cachedKnowledge = knowledge;
+    knowledgeCache.text = knowledge;
+    knowledgeCache.loaded = true;
     console.log("✅ PDF knowledge loaded into memory.");
 
-    return cachedKnowledge;
+    return knowledgeCache.text;
 }

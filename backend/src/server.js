@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import chatRoutes from "./routes/chat.routes.js";
+import { createEmbedding } from "./services/embedding.service.js";
 
 dotenv.config();
 
@@ -20,6 +21,13 @@ app.get("/", (req, res) => {
 app.use("/api/chat", chatRoutes);
 
 const PORT = process.env.PORT || 5000;
+
+const embedding = await createEmbedding(
+    "Healthcare assistance requirements"
+);
+
+console.log(embedding.length);
+console.log(embedding.slice(0, 10));
 
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
