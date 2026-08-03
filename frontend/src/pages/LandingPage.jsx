@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
     MessageCircle,
@@ -17,40 +17,90 @@ import {
     Plus,
     ArrowRight,
 } from "lucide-react";
+const conversations = [
+    {
+        question: "Ano ang requirements para sa Medicine Assistance?",
+        answer: [
+        "Medical Certificate",
+        "Valid Government ID",
+        "Reseta ng doktor",
+        "Barangay Certificate"
+        ]
+    },
+    {
+        question: "Saan ako mag-a-apply?",
+        answer: [
+        "Depende sa iyong sitwasyon.",
+        "Maaaring DSWD, DOH, LGU, o PSWDO."
+        ]
+    },
+    {
+        question: "Libre ba ang serbisyo?",
+        answer: [
+        "Oo.",
+        "Libre ang paggamit ng E-Tanong AI."
+        ]
+    }
+];
+
+const suggestions = [
+    { icon: CheckCircle2, color: "text-emerald-600 bg-emerald-50", text: "Ano ang mga programang inaalok ng DSWD, DOH, LGU, at PSWDO?" },
+    { icon: Pill, color: "text-violet-600 bg-violet-50", text: "Ano ang requirements para sa Medicine Assistance?" },
+    { icon: Receipt, color: "text-amber-600 bg-amber-50", text: "Ano ang requirements para sa Hospital Bill Assistance?" },
+    { icon: ClipboardCheck, color: "text-sky-600 bg-sky-50", text: "Anong mga dokumento ang kailangan para mag-apply?" },
+    { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", text: "Sino ang kwalipikado sa tulong medikal ng gobyerno?" },
+];
+
+const capabilities = [
+    { icon: MapPin, color: "text-emerald-600 bg-emerald-50", title: "Saan mag-apply", desc: "Alamin kung DSWD, DOH, LGU, o PSWDO ang tamang lapitan para sa iyong sitwasyon." },
+    { icon: Pill, color: "text-violet-600 bg-violet-50", title: "Medicine Assistance", desc: "Buong listahan ng dokumentong kailangan bago ka pumunta sa opisina." },
+    { icon: Receipt, color: "text-amber-600 bg-amber-50", title: "Hospital Bill Assistance", desc: "Gabay sa requirements para sa tulong-pinansyal sa gastusing pang-ospital." },
+    { icon: ClipboardList, color: "text-sky-600 bg-sky-50", title: "Listahan ng dokumento", desc: "Kumpletong checklist ng papeles na kailangan mong dalhin." },
+    { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", title: "Eligibility check", desc: "Malaman kung sino ang kwalipikado batay sa alituntunin ng bawat programa." },
+    { icon: MessageCircle, color: "text-teal-600 bg-teal-50", title: "Mga madalas itanong", desc: "Mabilis na sagot sa pinaka-karaniwang tanong tungkol sa proseso." },
+];
+
+const steps = [
+    { n: "01", title: "Itanong", desc: "I-type ang tanong mo tungkol sa tulong medikal, kasing simple ng 'saan ako mag-a-apply'." },
+    { n: "02", title: "Alamin", desc: "Tatanggapin mo ang gabay: kung saang ahensya lalapit at anong dokumento ang dadalhin." },
+    { n: "03", title: "Pumunta", desc: "Dala mo na ang kompletong requirements — mas mabilis, walang balik-balik." },
+];
+
+const faqs = [
+    { q: "Bayad ba gamitin ang E-Tanong AI?", a: "Libre ang paggamit nito. Layunin lang nitong gawing mas madali ang paghahanap ng impormasyon tungkol sa tulong medikal ng gobyerno." },
+    { q: "Naka-imbak ba ang mga usapan ko?", a: "Hindi. Pansamantala at pribado ang bawat chat session — nawawala ito pagkatapos mong umalis." },
+    { q: "Pwede ba akong ma-refer sa maling ahensya?", a: "Sinusunod ng mga sagot ang alam na proseso ng DSWD, DOH, LGU, at PSWDO, pero laging mabuting kumpirmahin sa opisina bago pumunta." },
+    { q: "Nagbibigay ba ito ng medical advice?", a: "Hindi. Gabay lamang ito sa proseso at requirements — hindi ito nagde-diagnose ng kondisyon o nagrereseta ng gamot." },
+];
 
 export default function ETanongLanding() {
     const [openFaq, setOpenFaq] = useState(0);
-    //const [typedStep, setTypedStep] = useState(0);
-
-    const suggestions = [
-        { icon: CheckCircle2, color: "text-emerald-600 bg-emerald-50", text: "Ano ang mga programang inaalok ng DSWD, DOH, LGU, at PSWDO?" },
-        { icon: Pill, color: "text-violet-600 bg-violet-50", text: "Ano ang requirements para sa Medicine Assistance?" },
-        { icon: Receipt, color: "text-amber-600 bg-amber-50", text: "Ano ang requirements para sa Hospital Bill Assistance?" },
-        { icon: ClipboardCheck, color: "text-sky-600 bg-sky-50", text: "Anong mga dokumento ang kailangan para mag-apply?" },
-        { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", text: "Sino ang kwalipikado sa tulong medikal ng gobyerno?" },
-    ];
-
-    const capabilities = [
-        { icon: MapPin, color: "text-emerald-600 bg-emerald-50", title: "Saan mag-apply", desc: "Alamin kung DSWD, DOH, LGU, o PSWDO ang tamang lapitan para sa iyong sitwasyon." },
-        { icon: Pill, color: "text-violet-600 bg-violet-50", title: "Medicine Assistance", desc: "Buong listahan ng dokumentong kailangan bago ka pumunta sa opisina." },
-        { icon: Receipt, color: "text-amber-600 bg-amber-50", title: "Hospital Bill Assistance", desc: "Gabay sa requirements para sa tulong-pinansyal sa gastusing pang-ospital." },
-        { icon: ClipboardList, color: "text-sky-600 bg-sky-50", title: "Listahan ng dokumento", desc: "Kumpletong checklist ng papeles na kailangan mong dalhin." },
-        { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", title: "Eligibility check", desc: "Malaman kung sino ang kwalipikado batay sa alituntunin ng bawat programa." },
-        { icon: MessageCircle, color: "text-teal-600 bg-teal-50", title: "Mga madalas itanong", desc: "Mabilis na sagot sa pinaka-karaniwang tanong tungkol sa proseso." },
-    ];
-
-    const steps = [
-        { n: "01", title: "Itanong", desc: "I-type ang tanong mo tungkol sa tulong medikal, kasing simple ng 'saan ako mag-a-apply'." },
-        { n: "02", title: "Alamin", desc: "Tatanggapin mo ang gabay: kung saang ahensya lalapit at anong dokumento ang dadalhin." },
-        { n: "03", title: "Pumunta", desc: "Dala mo na ang kompletong requirements — mas mabilis, walang balik-balik." },
-    ];
-
-    const faqs = [
-        { q: "Bayad ba gamitin ang E-Tanong AI?", a: "Libre ang paggamit nito. Layunin lang nitong gawing mas madali ang paghahanap ng impormasyon tungkol sa tulong medikal ng gobyerno." },
-        { q: "Naka-imbak ba ang mga usapan ko?", a: "Hindi. Pansamantala at pribado ang bawat chat session — nawawala ito pagkatapos mong umalis." },
-        { q: "Pwede ba akong ma-refer sa maling ahensya?", a: "Sinusunod ng mga sagot ang alam na proseso ng DSWD, DOH, LGU, at PSWDO, pero laging mabuting kumpirmahin sa opisina bago pumunta." },
-        { q: "Nagbibigay ba ito ng medical advice?", a: "Hindi. Gabay lamang ito sa proseso at requirements — hindi ito nagde-diagnose ng kondisyon o nagrereseta ng gamot." },
-    ];
+    const [chatStage, setChatStage] = useState("user");
+    const [currentChat, setCurrentChat] = useState(0);
+    
+    useEffect(() => {
+        const user = setTimeout(() => {
+            setChatStage("user");
+        }, 0);
+        const typing = setTimeout(() => {
+            setChatStage("typing");
+        }, 1800);
+        const reply = setTimeout(() => {
+            setChatStage("reply");
+        }, 3000);
+        const next = setTimeout(() => {
+            setCurrentChat((prev) => (prev + 1) % conversations.length);
+        }, 6500);
+    
+    
+        return () => {
+            clearTimeout(user);
+            clearTimeout(typing);
+            clearTimeout(reply);
+            clearTimeout(next);
+        };
+    }, [currentChat]);
+    
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
@@ -135,32 +185,46 @@ export default function ETanongLanding() {
                                 <Plus size={12} /> New Chat
                             </div>
                         </div>
+                        <div className="bg-white rounded-2xl border border-slate-200 p-5">
+                            <div className="h-40 overflow-y-auto">
+                                {/* USER */}
+                                
+                                {chatStage !== "hidden" && (
+                                    <div className="flex justify-end">
+                                        <div className="bg-indigo-600 text-white rounded-2xl rounded-br-md px-4 py-3 text-sm max-w-[80%] shadow">
+                                            {conversations[currentChat].question}
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {/* AI Typing */}
+                                
+                                {chatStage === "typing" && (
+                                    <div className="flex">
+                                        <div className="bg-slate-100 rounded-2xl rounded-bl-md px-4 py-3">
+                                            <div className="flex gap-1">
+                                                <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce"></span>
+                                                <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:.15s]"></span>
+                                                <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce [animation-delay:.3s]"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {/* AI Reply */}
+                                
+                                {chatStage === "reply" && (
+                                    <div className="flex">
+                                        <div className="bg-slate-100 rounded-2xl rounded-bl-md px-4 py-3 text-sm max-w-[85%] space-y-1 shadow">
 
-                        <div className="p-5">
-                            <div className="bg-white rounded-2xl border border-slate-200 p-5">
-                                <p className="font-bold text-slate-900 text-[14px] mb-2">👋 Welcome to E-Tanong AI!</p>
-                                <p className="text-[12.5px] text-slate-600 mb-3 leading-relaxed">
-                                Hi! I'm your assistant for government medical assistance. I can guide you through the requirements and application process.
-                                </p>
-                                <ul className="space-y-1.5 mb-3">
-                                {[
-                                    "Saan mag-apply para sa medical assistance",
-                                    "Requirements para sa Medicine Assistance",
-                                    "Requirements para sa Hospital Bill Assistance",
-                                    "Step-by-step application process",
-                                ].map((item) => (
-                                    <li key={item} className="flex items-start gap-1.5 text-[12px] text-slate-700">
-                                    <CheckCircle2 size={13} className="text-emerald-500 mt-0.5 shrink-0" />
-                                    {item}
-                                    </li>
-                                ))}
-                                </ul>
-                                <div className="pt-3 border-t border-slate-100 flex items-start gap-1.5 text-[11px] text-slate-400 italic">
-                                    <ShieldCheck size={13} className="mt-0.5 shrink-0" />
-                                    I provide process and requirements guidance only, and cannot diagnose conditions or prescribe treatment.
-                                </div>
+                                            {conversations[currentChat].answer.map((item) => (
+                                            <div key={item}>✓ {item}</div>
+                                            ))}
+
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-
                             <div className="mt-4 bg-white rounded-full border border-slate-200 px-4 py-2.5 flex items-center gap-3">
                                 <Paperclip size={15} className="text-slate-400" />
                                 <Smile size={15} className="text-slate-400" />
@@ -327,7 +391,7 @@ export default function ETanongLanding() {
                     className="mt-8 inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white font-semibold px-7 py-4 rounded-full shadow-md shadow-indigo-200"
                 >
                     Buksan ang E-Tanong AI <ArrowRight size={16} />
-                </Link>
+                </Link> 
             </section>
 
             {/* FOOTER */}
