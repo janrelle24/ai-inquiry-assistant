@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     MessageCircle,
     Send,
@@ -16,6 +16,7 @@ import {
     ChevronDown,
     Plus,
     ArrowRight,
+    Loader2,
 } from "lucide-react";
 const conversations = [
     {
@@ -73,10 +74,40 @@ const faqs = [
     { q: "Nagbibigay ba ito ng medical advice?", a: "Hindi. Gabay lamang ito sa proseso at requirements — hindi ito nagde-diagnose ng kondisyon o nagrereseta ng gamot." },
 ];
 
+// Full-screen loading takeover shown while the app "connects" to the chat
+function ChatLoadingOverlay({ visible }) {
+    return (
+        <div
+            className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-50/95 backdrop-blur-sm transition-opacity duration-300 ${
+                visible ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            role="status"
+            aria-live="polite"
+        >
+            <div className="relative flex items-center justify-center">
+                <span className="absolute h-20 w-20 rounded-full bg-teal-400/20 animate-ping" />
+                <span className="absolute h-20 w-20 rounded-full border-2 border-teal-200" />
+                <div className="relative w-14 h-14 rounded-2xl bg-teal-500 flex items-center justify-center text-white shadow-lg shadow-teal-200">
+                    <MessageCircle size={24} />
+                </div>
+            </div>
+
+            <div className="mt-7 flex items-center gap-2 text-slate-700 font-semibold text-[15px]">
+                <Loader2 size={16} className="animate-spin text-indigo-600" />
+                Kumokonekta sa E-Tanong AI...
+            </div>
+            <p className="mt-2 text-[13px] text-slate-400">Isang sandali lang, inihahanda na ang iyong chat.</p>
+        </div>
+    );
+}
+
 export default function ETanongLanding() {
     const [openFaq, setOpenFaq] = useState(0);
     const [chatStage, setChatStage] = useState("user");
     const [currentChat, setCurrentChat] = useState(0);
+    //
+    const [chatLoading, setChatLoading] = useState(false);
+    const navigate = useNavigate();
     
     useEffect(() => {
         const user = setTimeout(() => {
@@ -101,9 +132,18 @@ export default function ETanongLanding() {
         };
     }, [currentChat]);
     
+    // Shows a brief loading state on the CTA before navigating to /chat
+    const handleStartChat = () => {
+        if (chatLoading) return;
+        setChatLoading(true);
+        setTimeout(() => {
+            navigate("/chat");
+        }, 4000);
+    };
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+            <ChatLoadingOverlay visible={chatLoading} />
             {/* NAV */}
             <nav className="sticky top-0 z-30 bg-white/85 backdrop-blur border-b border-slate-200">
                 <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -122,12 +162,14 @@ export default function ETanongLanding() {
                         <a href="#steps" className="hover:text-slate-900">Paano gamitin</a>
                         <a href="#faq" className="hover:text-slate-900">FAQ</a>
                     </div>
-                    <Link
-                        to="/chat"
-                        className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm shadow-indigo-200"
+                    <button
+                        onClick={handleStartChat}
+                        disabled={chatLoading}
+                        className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-90 disabled:cursor-not-allowed transition-colors text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm shadow-indigo-200 min-w-[152px] justify-center cursor-pointer"
                     >
                         Simulan ang chat <ArrowRight size={14} />
-                    </Link>
+                    </button>
+
                 </div>
             </nav>
 
@@ -144,12 +186,13 @@ export default function ETanongLanding() {
                         Itanong lang sa E-Tanong AI kung saan mag-apply, anong dokumento ang kailangan, at ano ang proseso — para sa DSWD, DOH, LGU, at PSWDO.
                     </p>
                     <div className="mt-8 flex flex-wrap items-center gap-3">
-                        <Link
-                            to="/chat"
-                            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white font-semibold px-6 py-3.5 rounded-full shadow-md shadow-indigo-200"
+                        <button
+                            onClick={handleStartChat}
+                            disabled={chatLoading}
+                            className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-90 disabled:cursor-not-allowed transition-colors text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm shadow-indigo-200 min-w-[152px] justify-center cursor-pointer"
                         >
-                            Mag-chat ngayon <ArrowRight size={16} />
-                        </Link>
+                            Mag chat ngayon <ArrowRight size={14} />
+                        </button>
                         <a
                             href="#about"
                             className="inline-flex items-center gap-2 border border-slate-300 hover:border-slate-400 transition-colors text-slate-700 font-semibold px-6 py-3.5 rounded-full"
@@ -385,13 +428,13 @@ export default function ETanongLanding() {
                 <span className="text-[12px] font-semibold tracking-wide uppercase text-indigo-600">Handa ka na ba?</span>
                 <h2 className="mt-3 text-4xl font-extrabold text-slate-900">Itanong ang unang tanong mo ngayon.</h2>
                 <p className="mt-4 text-slate-600">Ilang segundo lang bago mo malaman kung saan pupunta at ano ang dadalhin.</p>
-                
-                <Link
-                    to="/chat"
-                    className="mt-8 inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white font-semibold px-7 py-4 rounded-full shadow-md shadow-indigo-200"
+                <button
+                    onClick={handleStartChat}
+                    disabled={chatLoading}
+                    className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-90 disabled:cursor-not-allowed transition-colors text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm shadow-indigo-200 min-w-[152px] justify-center cursor-pointer"
                 >
-                    Buksan ang E-Tanong AI <ArrowRight size={16} />
-                </Link> 
+                    Buksan ang E-Tanong AI <ArrowRight size={14} />
+                </button>
             </section>
 
             {/* FOOTER */}
