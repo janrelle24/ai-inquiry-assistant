@@ -1,7 +1,7 @@
 import { Plus, ClipboardList, Landmark, FileText, MapPin, Info, CheckCircle2,
     ShieldCheck, MessageCircleQuestion, } from "lucide-react";
 import logo from "../assets/E-Tanong.png";
-function Sidebar({ isOpen, onClose, onNewChat }) {
+function Sidebar({ isOpen, onClose, onNewChat, onSuggestion }) {
 
     const suggestedQuestions = [
         {
@@ -94,7 +94,10 @@ function Sidebar({ isOpen, onClose, onNewChat }) {
                     {suggestedQuestions.map((item, index) => (
                         <button
                             key={index}
-                            onClick={() => onClose()}
+                            onClick={() =>{
+                                onSuggestion(item.text);
+                                onClose();
+                            }}
                             className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition hover:border-blue-500 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700 cursor-pointer"
                         >
                             <div className="flex items-start gap-3">

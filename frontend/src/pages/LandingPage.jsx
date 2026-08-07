@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/E-Tanong.png";
 import {
     MessageCircle,
     Send,
@@ -17,10 +18,16 @@ import {
     Plus,
     ArrowRight,
     Loader2,
+    Menu,
+    X,
+    Info,
+    HelpCircle,
+    ListOrdered,
+    MessageCircleQuestion,
 } from "lucide-react";
 const conversations = [
     {
-        question: "Ano ang requirements para sa Medicine Assistance?",
+        question: "What are the requirements for Medicine Assistance?",
         answer: [
         "Medical Certificate",
         "Valid Government ID",
@@ -29,36 +36,36 @@ const conversations = [
         ]
     },
     {
-        question: "Saan ako mag-a-apply?",
+        question: "Where should I apply?",
         answer: [
-        "Depende sa iyong sitwasyon.",
-        "Maaaring DSWD, DOH, LGU, o PSWDO."
+        "It depends on your situation.",
+        "You may need to apply through the DSWD, DOH, LGU, or PSWDO."
         ]
     },
     {
-        question: "Libre ba ang serbisyo?",
+        question: "Is the service free?",
         answer: [
-        "Oo.",
-        "Libre ang paggamit ng E-Tanong AI."
+        "Yes.",
+        "E-Tanong AI is free to use."
         ]
     }
 ];
 
 const suggestions = [
-    { icon: CheckCircle2, color: "text-emerald-600 bg-emerald-50", text: "Ano ang mga programang inaalok ng DSWD, DOH, LGU, at PSWDO?" },
-    { icon: Pill, color: "text-violet-600 bg-violet-50", text: "Ano ang requirements para sa Medicine Assistance?" },
-    { icon: Receipt, color: "text-amber-600 bg-amber-50", text: "Ano ang requirements para sa Hospital Bill Assistance?" },
-    { icon: ClipboardCheck, color: "text-sky-600 bg-sky-50", text: "Anong mga dokumento ang kailangan para mag-apply?" },
-    { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", text: "Sino ang kwalipikado sa tulong medikal ng gobyerno?" },
+    { icon: CheckCircle2, color: "text-emerald-600 bg-emerald-50", text: "What medical assistance programs are offered by DSWD, DOH, LGU, and PSWDO?" },
+    { icon: Pill, color: "text-violet-600 bg-violet-50", text: "What are the requirements for  Medicine Assistance?" },
+    { icon: Receipt, color: "text-amber-600 bg-amber-50", text: "What are the requirements for Hospital Bill Assistance?" },
+    { icon: ClipboardCheck, color: "text-sky-600 bg-sky-50", text: "What documents are required to apply for assistance?" },
+    { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", text: "Who is eligible for government assistance?" },
 ];
 
 const capabilities = [
-    { icon: MapPin, color: "text-emerald-600 bg-emerald-50", title: "Saan mag-apply", desc: "Alamin kung DSWD, DOH, LGU, o PSWDO ang tamang lapitan para sa iyong sitwasyon." },
-    { icon: Pill, color: "text-violet-600 bg-violet-50", title: "Medicine Assistance", desc: "Buong listahan ng dokumentong kailangan bago ka pumunta sa opisina." },
-    { icon: Receipt, color: "text-amber-600 bg-amber-50", title: "Hospital Bill Assistance", desc: "Gabay sa requirements para sa tulong-pinansyal sa gastusing pang-ospital." },
-    { icon: ClipboardList, color: "text-sky-600 bg-sky-50", title: "Listahan ng dokumento", desc: "Kumpletong checklist ng papeles na kailangan mong dalhin." },
-    { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", title: "Eligibility check", desc: "Malaman kung sino ang kwalipikado batay sa alituntunin ng bawat programa." },
-    { icon: MessageCircle, color: "text-teal-600 bg-teal-50", title: "Mga madalas itanong", desc: "Mabilis na sagot sa pinaka-karaniwang tanong tungkol sa proseso." },
+    { icon: MapPin, color: "text-emerald-600 bg-emerald-50", title: "Where to Apply", desc: "Find out whether to apply through the DSWD, DOH, LGU, or PSWDO based on your situation." },
+    { icon: Pill, color: "text-violet-600 bg-violet-50", title: "Medicine Assistance", desc: "Complete list of the documents you need before visiting the office." },
+    { icon: Receipt, color: "text-amber-600 bg-amber-50", title: "Hospital Bill Assistance", desc: "Guide to the requirements for obtaining financial assistance with hospital expenses." },
+    { icon: ClipboardList, color: "text-sky-600 bg-sky-50", title: "Document Checklist", desc: "A complete checklist of the documents you need to bring." },
+    { icon: ShieldCheck, color: "text-rose-600 bg-rose-50", title: "Eligibility check", desc: "Find out who qualifies based on each program's eligibility guidelines." },
+    { icon: MessageCircle, color: "text-teal-600 bg-teal-50", title: "Frequently Asked Questions", desc: "Quick answers to the most common questions about the application process." },
 ];
 
 const steps = [
@@ -74,6 +81,13 @@ const faqs = [
     { q: "Nagbibigay ba ito ng medical advice?", a: "Hindi. Gabay lamang ito sa proseso at requirements — hindi ito nagde-diagnose ng kondisyon o nagrereseta ng gamot." },
 ];
 
+const navLinks = [
+    { href: "#about", label: "About", icon: Info },
+    { href: "#help", label: "Matutulungan", icon: HelpCircle },
+    { href: "#steps", label: "Paano gamitin", icon: ListOrdered },
+    { href: "#faq", label: "FAQ", icon: MessageCircleQuestion },
+];
+
 // Full-screen loading takeover shown while the app "connects" to the chat
 function ChatLoadingOverlay({ visible }) {
     return (
@@ -87,9 +101,11 @@ function ChatLoadingOverlay({ visible }) {
             <div className="relative flex items-center justify-center">
                 <span className="absolute h-20 w-20 rounded-full bg-teal-400/20 animate-ping" />
                 <span className="absolute h-20 w-20 rounded-full border-2 border-teal-200" />
-                <div className="relative w-14 h-14 rounded-2xl bg-teal-500 flex items-center justify-center text-white shadow-lg shadow-teal-200">
-                    <MessageCircle size={24} />
-                </div>
+                <img
+                    src={logo}
+                    alt="E-Tanong AI Logo"
+                    className="relative w-14 h-14 rounded-2xl object-contain shadow-lg shadow-teal-200"
+                />
             </div>
 
             <div className="mt-7 flex items-center gap-2 text-slate-700 font-semibold text-[15px]">
@@ -107,8 +123,27 @@ export default function ETanongLanding() {
     const [currentChat, setCurrentChat] = useState(0);
     //
     const [chatLoading, setChatLoading] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false); // mobile sidebar drawer
+    const [scrolled, setScrolled] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(() =>
+        typeof window !== "undefined" ? window.matchMedia("(min-width: 1024px)").matches : true
+    );
     const navigate = useNavigate();
-    
+
+    // Drives top-nav (desktop) vs sidebar-drawer (mobile) directly off actual window width
+    useEffect(() => {
+        const mq = window.matchMedia("(min-width: 1024px)");
+        const onChange = (e) => setIsDesktop(e.matches);
+        mq.addEventListener("change", onChange);
+        return () => mq.removeEventListener("change", onChange);
+    }, []);
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 8);
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
     useEffect(() => {
         const user = setTimeout(() => {
             setChatStage("user");
@@ -132,36 +167,111 @@ export default function ETanongLanding() {
         };
     }, [currentChat]);
     
-    // Shows a brief loading state on the CTA before navigating to /chat
+    // Shows a full-screen loading takeover before navigating to /chat
     const handleStartChat = () => {
         if (chatLoading) return;
         setChatLoading(true);
         setTimeout(() => {
             navigate("/chat");
-        }, 4000);
+        }, 1400);
     };
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
             <ChatLoadingOverlay visible={chatLoading} />
-            {/* NAV */}
-            <nav className="sticky top-0 z-30 bg-white/85 backdrop-blur border-b border-slate-200">
-                <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+            {/* MOBILE TOPBAR + SIDEBAR DRAWER */}
+            {!isDesktop && (
+            <>
+            <div className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200 px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <img src={logo} alt="E-Tanong AI Logo" className="w-8 h-8 rounded-lg object-contain" />
+                    <span className="font-bold text-slate-900 text-[15px]">E-Tanong AI</span>
+                </div>
+                <button
+                    onClick={() => setMobileOpen(true)}
+                    className="p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition"
+                    aria-label="Open menu"
+                >
+                    <Menu size={20} />
+                </button>
+            </div>
+
+            <div
+                onClick={() => setMobileOpen(false)}
+                className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
+                    mobileOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}
+            />
+            <aside
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transition-transform duration-300 ${
+                    mobileOpen ? "translate-x-0" : "-translate-x-full"
+                }`}
+            >
+                <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+                    <div className="flex items-center gap-2">
+                        <img src={logo} alt="E-Tanong AI Logo" className="w-8 h-8 rounded-lg object-contain" />
+                        <span className="font-bold text-slate-900 text-[15px]">E-Tanong AI</span>
+                    </div>
+                    <button
+                        onClick={() => setMobileOpen(false)}
+                        className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 transition"
+                        aria-label="Close menu"
+                    >
+                        <X size={18} />
+                    </button>
+                </div>
+                <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
+                    {navLinks.map((link) => (
+                        <a
+                            key={link.href}
+                            href={link.href}
+                            onClick={() => setMobileOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                        >
+                            <link.icon size={18} />
+                            {link.label}
+                        </a>
+                    ))}
+                </nav>
+                <div className="p-3 border-t border-slate-200">
+                    <button
+                        onClick={() => { setMobileOpen(false); handleStartChat(); }}
+                        disabled={chatLoading}
+                        className="w-full inline-flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white text-sm font-semibold px-4 py-2.5 rounded-full"
+                    >
+                        Simulan ang chat <ArrowRight size={14} />
+                    </button>
+                </div>
+            </aside>
+            </>
+            )}
+
+            {/* DESKTOP TOP NAV */}
+            {isDesktop && (
+            <nav
+                className={`sticky top-0 z-30 bg-white/85 backdrop-blur border-b transition-shadow duration-300 ${
+                    scrolled ? "border-slate-200 shadow-sm shadow-slate-200/60" : "border-transparent"
+                }`}
+            >
+                <div className="max-w-6xl mx-auto px-6 py-3.5 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center text-white shadow-sm shadow-teal-200">
-                            <MessageCircle className="w-4.5 h-4.5" size={18} />
-                        </div>
-                        <div className="leading-tight">
-                            <div className="font-bold text-slate-900 text-[15px]">E-Tanong AI</div>
-                            <div className="text-[11px] text-slate-500 -mt-0.5">Medical Requirements Assistant</div>
-                        </div>
+                        <img src={logo} alt="E-Tanong AI Logo" className="w-8 h-8 rounded-lg object-contain shrink-0" />
+                        <span className="font-bold text-slate-900 text-[15px]">E-Tanong AI</span>
                     </div>
-                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                        <a href="#about" className="hover:text-slate-900">About</a>
-                        <a href="#help" className="hover:text-slate-900">Matutulungan</a>
-                        <a href="#steps" className="hover:text-slate-900">Paano gamitin</a>
-                        <a href="#faq" className="hover:text-slate-900">FAQ</a>
+
+                    <div className="flex items-center gap-7 text-sm font-medium text-slate-600">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                className="relative py-1 hover:text-slate-900 transition-colors after:absolute after:left-0 after:-bottom-0.5 after:h-[1.5px] after:w-0 after:bg-indigo-600 after:transition-all hover:after:w-full"
+                            >
+                                {link.label}
+                            </a>
+                        ))}
                     </div>
+
                     <button
                         onClick={handleStartChat}
                         disabled={chatLoading}
@@ -169,9 +279,12 @@ export default function ETanongLanding() {
                     >
                         Simulan ang chat <ArrowRight size={14} />
                     </button>
-
                 </div>
             </nav>
+            )}
+
+            {/* PAGE CONTENT */}
+            <div>
 
             {/* HERO */}
             <header className="max-w-6xl mx-auto px-6 pt-16 pb-20 grid lg:grid-cols-2 gap-14 items-center">
@@ -217,9 +330,11 @@ export default function ETanongLanding() {
                     <div className="absolute -inset-4 bg-gradient-to-br from-teal-100 via-indigo-50 to-transparent rounded-[32px] blur-2xl opacity-70" />
                     <div className="relative bg-[#EEF0F6] border border-slate-200 rounded-[24px] shadow-xl shadow-slate-200/70 overflow-hidden">
                         <div className="bg-white px-5 py-3.5 border-b border-slate-200 flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center text-white">
-                                <MessageCircle size={15} />
-                            </div>
+                            <img
+                                src={logo}
+                                alt="E-Tanong AI Logo"
+                                className="w-8 h-8 rounded-lg object-contain"
+                            />
                             <div className="leading-tight">
                                 <div className="font-bold text-slate-900 text-[13px]">E-Tanong AI</div>
                                 <div className="text-[10.5px] text-slate-500">Medical Requirements Assistant</div>
@@ -303,12 +418,17 @@ export default function ETanongLanding() {
             <section id="about" className="max-w-6xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-16 items-start">
                 <div>
                     <span className="text-[12px] font-semibold tracking-wide uppercase text-indigo-600">Ano ang E-Tanong AI</span>
-                    <h2 className="mt-3 text-3xl font-extrabold text-slate-900">Isang gabay, hindi isang pila.</h2>
+                    <h2 className="mt-3 text-3xl font-extrabold text-slate-900">Mas malinaw na gabay. Mas mabilis na proseso. Mas Kaunting pabalik-balik opisina.</h2>
                     <p className="mt-4 text-slate-600 leading-relaxed max-w-md">
-                        Maraming Pilipino ang nahihirapang malaman kung saang ahensya sila dapat lumapit, o kung ano talaga ang kailangang dalhin — kaya paulit-ulit silang bumabalik sa opisina nang kulang sa requirements.
+                        Maraming mamamayan ang nalilito kung saang ahensya dapat lumapit o kung anu-anong dokumento ang kailangang ihanda. 
+                        Dahil dito, nauuwi sa paulit-ulit na pagpunta sa opisina at dagdag na oras, gastos, at abala.
+                    </p>
+                    <p className="mt-4 text-slate-600 leading-relaxed max-w-md">
+                        Sa E-Tanong AI, maaari kang magtanong at makatanggap ng malinaw na gabay batay sa impormasyon mula sa DSWD, DOH, LGU, at PSWDO. 
+                        Tutulungan ka nitong malaman ang tamang opisina, ang mga kinakailangang dokumento, at ang proseso ng pag-avail ng mga programang pangtulong.
                     </p>
                     <p className="mt-3 text-slate-600 leading-relaxed max-w-md">
-                        Sinasagot ng E-Tanong AI ang mga tanong na iyon bago ka pa umalis ng bahay, batay sa gabay ng DSWD, DOH, LGU, at PSWDO.
+                        Sa ngayon, ang E-Tanong AI ay nakatuon sa Lalawigan ng Agusan del Norte, upang makapagbigay ng mas tumpak at angkop na impormasyon para sa mga mamamayan ng lalawigan.
                     </p>
                 </div>
                 <div className="divide-y divide-slate-200 border-t border-slate-200">
@@ -431,7 +551,7 @@ export default function ETanongLanding() {
                 <button
                     onClick={handleStartChat}
                     disabled={chatLoading}
-                    className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-90 disabled:cursor-not-allowed transition-colors text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm shadow-indigo-200 min-w-[152px] justify-center cursor-pointer"
+                    className="mt-8 inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-90 disabled:cursor-not-allowed transition-colors text-white text-sm font-semibold px-4 py-2.5 rounded-full shadow-sm shadow-indigo-200 min-w-[152px] justify-center cursor-pointer"
                 >
                     Buksan ang E-Tanong AI <ArrowRight size={14} />
                 </button>
@@ -441,14 +561,18 @@ export default function ETanongLanding() {
             <footer className="border-t border-slate-200">
                 <div className="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-teal-500 flex items-center justify-center text-white">
-                            <MessageCircle size={13} />
-                        </div>
+                        <img
+                            src={logo}
+                            alt="E-Tanong AI Logo"
+                            className="w-7 h-7 rounded-lg object-contain"
+                        />
                         <span className="font-bold text-slate-900 text-sm">E-Tanong AI</span>
                     </div>
                     <span className="text-[12px] text-slate-400">Gabay lamang sa proseso — hindi kapalit ng payo mula sa opisyal na ahensya.</span>
                 </div>
             </footer>
+
+            </div>
         </div>
     );
 }

@@ -35,6 +35,7 @@ function Home() {
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
                 onNewChat={handleNewChat}
+                onSuggestion={sendMessage}
             />
             
             <div className="flex flex-1 flex-col">
