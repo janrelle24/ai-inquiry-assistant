@@ -17,6 +17,10 @@ export function cosineSimilarity(a, b) {
 }
 
 export function searchVectors(questionEmbedding) {
+    /**temporary */
+    console.log("Embeddings:", knowledgeCache.embeddings.length);
+    console.log("Chunks:", knowledgeCache.chunks.length);
+    /** */
     const scores = [];
     for (let i = 0; i < knowledgeCache.embeddings.length; i++) {
         const score = cosineSimilarity(
@@ -30,7 +34,8 @@ export function searchVectors(questionEmbedding) {
     }
     scores.sort((a, b) => b.score - a.score);
     return scores
-        .filter(item => item.score >= 0.70)
+        //.filter(item => item.score >= 0.70)
+        .sort((a, b) => b.score - a.score)
         .slice(0, 5)
         .map(item => item.chunk);
 

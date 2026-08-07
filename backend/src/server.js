@@ -23,10 +23,6 @@ app.use("/api/chat", chatRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-const embedding = await createEmbedding(
-    "Healthcare assistance requirements"
-);
-
 //console.log(embedding.length);
 //console.log(embedding.slice(0, 10));
 

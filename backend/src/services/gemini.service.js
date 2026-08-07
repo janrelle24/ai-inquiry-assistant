@@ -28,11 +28,14 @@ export async function generateResponse(question, sessionId, retries = 3) {
 
             const relevantChunks =
                 searchVectors(questionEmbedding);
-
+            /**temporary */
+            console.log("Relevant Chunks:", relevantChunks);
+            console.log("Type:", typeof relevantChunks);
+            console.log("Is Array:", Array.isArray(relevantChunks));
+            /** */
             const pdfKnowledge =
                 relevantChunks.join("\n\n");
-            /** */
-
+            
             const history = getConversation(sessionId);
             const conversation = history
                 .map(
@@ -41,7 +44,7 @@ export async function generateResponse(question, sessionId, retries = 3) {
             ${m.content}`
                 )
                 .join("\n\n");
-
+            
             const fullPrompt = buildPrompt(
                 pdfKnowledge,
                 conversation,
@@ -78,4 +81,4 @@ export async function generateResponse(question, sessionId, retries = 3) {
             await new Promise(resolve => setTimeout(resolve, 2000));
         }
     }
-}
+}  
