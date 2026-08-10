@@ -30,12 +30,19 @@ export default function useChat() {
             };
             setMessages((prev) => [...prev, aiMessage]);
         } catch (error) {
-            console.error(error);
+            console.error("Chat Error:", error);
+
+            let errorMessage = "Sorry, I couldn't reach the AI server.";
+
+            if (error.response?.status === 429) {
+                errorMessage =
+                    "You've sent too many messages. Please wait a few minutes and try again.";
+            }
 
             const aiMessage = {
                 id: Date.now() + 1,
                 role: "assistant",
-                content: "Sorry, I couldn't reach the AI server.",
+                content: errorMessage,
                 timestamp: new Date(),
             };
             setMessages((prev) => [...prev, aiMessage]);
