@@ -1,14 +1,9 @@
 import { Plus, ClipboardList, Landmark, FileText, MapPin, Info, CheckCircle2,
-    ShieldCheck, MessageCircleQuestion, } from "lucide-react";
+    ShieldCheck, } from "lucide-react";
 import logo from "../assets/E-Tanong.png";
 function Sidebar({ isOpen, onClose, onNewChat, onSuggestion }) {
 
     const suggestedQuestions = [
-        {
-            icon: MessageCircleQuestion,
-            tint: "text-indigo-600 bg-indigo-50",
-            text: "What is E-Tanong AI?",
-        },
         {
             icon: MapPin,
             tint: "text-blue-600 bg-blue-50",
