@@ -1,6 +1,6 @@
 <div align="center">
-
-# 🤖 E-Tanong AI
+<img src="frontend/src/assets/E-Tanong.png" alt="E-Tanong AI logo" width="120" />
+# E-Tanong AI
 
 ### AI-powered assistant for government medical assistance requirements
 
@@ -13,7 +13,7 @@
 ![Netlify](https://img.shields.io/badge/Frontend-Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white)
 ![Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat-square&logo=render&logoColor=black)
 
-**[🌐 Live Demo](https://e-tanongai.netlify.app/)** · **[🐛 Report a Bug](https://github.com/janrelle24/ai-inquiry-assistant/issues)** · **[💡 Request a Feature](https://github.com/janrelle24/ai-inquiry-assistant/issues)**
+**[🌐 Live Demo](https://e-tanongai.netlify.app/)** .
 
 <!-- Replace with a real screenshot or GIF of the chat interface -->
 <!-- <img src="docs/screenshot.png" alt="E-Tanong AI chat interface" width="800" /> -->
@@ -345,7 +345,7 @@ E-Tanong AI aims to make public-service information easier to reach through a si
 Computer Science · Full-Stack Development · AI Applications
 
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/janrelle24)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/janrelle-lubiano-69074b222)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat-square&logo=linkedin&logoColor=white)](http://www.linkedin.com/in/janrelle-lubiano-69074b222)
 
 ---
 
