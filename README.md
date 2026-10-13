@@ -13,7 +13,7 @@
 ![Netlify](https://img.shields.io/badge/Frontend-Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white)
 ![Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat-square&logo=render&logoColor=black)
 
-**[🌐 Live Demo][https://e-tanongai.netlify.app/]** · **[🐛 Report a Bug](https://github.com/janrelle24/ai-inquiry-assistant/issues)** · **[💡 Request a Feature](https://github.com/janrelle24/ai-inquiry-assistant/issues)**
+**[🌐 Live Demo]https://e-tanongai.netlify.app/** · **[🐛 Report a Bug](https://github.com/janrelle24/ai-inquiry-assistant/issues)** · **[💡 Request a Feature](https://github.com/janrelle24/ai-inquiry-assistant/issues)**
 
 <!-- Replace with a real screenshot or GIF of the chat interface -->
 <!-- <img src="docs/screenshot.png" alt="E-Tanong AI chat interface" width="800" /> -->
